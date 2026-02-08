@@ -14,7 +14,7 @@ function Logo({ className = '' }: { className?: string }) {
   return (
     <div className={clsx('flex items-center justify-center', className)}>
       <img 
-        src="/logo.jpeg" 
+        src="/logo.png" 
         alt="LocalLens" 
         className="w-10 h-10 rounded-xl shadow-lg"
       />
