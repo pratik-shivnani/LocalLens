@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom'
-import { Image, Search, Users, FolderInput, Settings } from 'lucide-react'
+import { Image, Search, Users, FolderInput, Settings, Shield, Scan } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navItems = [
@@ -10,20 +10,42 @@ const navItems = [
   { to: '/settings', icon: Settings, label: 'Settings' },
 ]
 
+function Logo({ className = '' }: { className?: string }) {
+  return (
+    <div className={clsx('flex items-center justify-center', className)}>
+      <div className="relative">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+          <Scan className="w-6 h-6 text-white" />
+        </div>
+        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-gray-900 flex items-center justify-center">
+          <Shield className="w-2 h-2 text-white" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Layout() {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-950">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white flex flex-col">
-        <div className="p-4 border-b border-gray-800">
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <Image className="w-6 h-6" />
-            Photo Organiser
-          </h1>
+      <aside className="w-72 bg-gray-900/50 backdrop-blur-xl text-white flex flex-col border-r border-gray-800/50">
+        {/* Logo & Brand */}
+        <div className="p-6 border-b border-gray-800/50">
+          <div className="flex items-center gap-3">
+            <Logo />
+            <div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                LocalLens
+              </h1>
+              <p className="text-xs text-gray-500">Privacy-first AI Photos</p>
+            </div>
+          </div>
         </div>
         
+        {/* Navigation */}
         <nav className="flex-1 p-4">
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.to}>
                 <NavLink
@@ -31,28 +53,33 @@ export default function Layout() {
                   end={item.to === '/'}
                   className={({ isActive }) =>
                     clsx(
-                      'flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
+                      'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200',
                       isActive
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                        : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
                     )
                   }
                 >
                   <item.icon className="w-5 h-5" />
-                  {item.label}
+                  <span className="font-medium">{item.label}</span>
                 </NavLink>
               </li>
             ))}
           </ul>
         </nav>
         
-        <div className="p-4 border-t border-gray-800 text-sm text-gray-500">
-          v0.1.0 - Local ML Photos
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-800/50">
+          <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <Shield className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs text-emerald-400 font-medium">100% Local Processing</span>
+          </div>
+          <p className="text-center text-xs text-gray-600 mt-3">v1.0.0</p>
         </div>
       </aside>
       
       {/* Main content */}
-      <main className="flex-1 overflow-auto bg-gray-50">
+      <main className="flex-1 overflow-auto bg-gradient-to-br from-gray-900 to-gray-950">
         <Outlet />
       </main>
     </div>

@@ -43,30 +43,32 @@ export default function PeoplePage() {
   return (
     <div className="h-full flex">
       {/* People list sidebar */}
-      <div className="w-80 border-r bg-white overflow-auto">
-        <div className="p-4 border-b">
-          <h1 className="text-xl font-bold">People</h1>
-          <p className="text-sm text-gray-500 mt-1">
+      <div className="w-80 border-r border-gray-800/50 bg-gray-900/30 overflow-auto">
+        <div className="p-6 border-b border-gray-800/50">
+          <h1 className="text-xl font-bold text-white">People</h1>
+          <p className="text-sm text-gray-400 mt-1">
             {people?.length || 0} people recognized
           </p>
         </div>
 
         {isLoading ? (
           <div className="flex items-center justify-center h-32">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
           </div>
         ) : (
-          <div className="divide-y">
+          <div className="p-2">
             {people?.map((person) => (
               <div
                 key={person.id}
-                className={`p-4 cursor-pointer hover:bg-gray-50 ${
-                  selectedPerson?.id === person.id ? 'bg-blue-50' : ''
+                className={`p-3 cursor-pointer rounded-xl mb-1 transition-all ${
+                  selectedPerson?.id === person.id 
+                    ? 'bg-blue-600/20 border border-blue-500/30' 
+                    : 'hover:bg-gray-800/50 border border-transparent'
                 }`}
                 onClick={() => setSelectedPerson(person)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden ring-2 ring-gray-700">
                     <img
                       src={peopleApi.getFaceThumbnailUrl(person.id, 96)}
                       alt=""
@@ -76,7 +78,7 @@ export default function PeoplePage() {
                         e.currentTarget.nextElementSibling?.classList.remove('hidden')
                       }}
                     />
-                    <User className="w-6 h-6 text-gray-400 hidden" />
+                    <User className="w-6 h-6 text-gray-500 hidden" />
                   </div>
                   <div className="flex-1 min-w-0">
                     {editingId === person.id ? (
@@ -85,31 +87,31 @@ export default function PeoplePage() {
                           type="text"
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
-                          className="flex-1 px-2 py-1 border rounded text-sm"
+                          className="flex-1 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-sm text-white"
                           autoFocus
                           onClick={(e) => e.stopPropagation()}
                         />
                         <button
                           onClick={(e) => { e.stopPropagation(); handleSaveEdit(person.id) }}
-                          className="p-1 text-green-600 hover:bg-green-50 rounded"
+                          className="p-1 text-emerald-400 hover:bg-emerald-500/20 rounded"
                         >
                           <Check className="w-4 h-4" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setEditingId(null) }}
-                          className="p-1 text-red-600 hover:bg-red-50 rounded"
+                          className="p-1 text-red-400 hover:bg-red-500/20 rounded"
                         >
                           <X className="w-4 h-4" />
                         </button>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <span className="font-medium truncate">
+                        <span className="font-medium truncate text-white">
                           {person.name || `Person ${person.id}`}
                         </span>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleStartEdit(person) }}
-                          className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                          className="p-1 text-gray-500 hover:text-white rounded opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <Edit2 className="w-3 h-3" />
                         </button>
@@ -130,25 +132,26 @@ export default function PeoplePage() {
       <div className="flex-1 overflow-auto">
         {selectedPerson ? (
           <>
-            <div className="p-4 border-b bg-white">
-              <h2 className="text-lg font-semibold">
+            <div className="p-6 border-b border-gray-800/50 bg-gray-900/50">
+              <h2 className="text-lg font-semibold text-white">
                 {selectedPerson.name || `Person ${selectedPerson.id}`}
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400">
                 {personPhotos?.length || 0} photos
               </p>
             </div>
             {photosLoading ? (
               <div className="flex items-center justify-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
               </div>
             ) : (
               <PhotoGrid photos={personPhotos || []} groupByMonth={false} />
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            Select a person to view their photos
+          <div className="flex flex-col items-center justify-center h-full text-gray-500">
+            <User className="w-16 h-16 text-gray-700 mb-4" />
+            <p className="text-lg">Select a person to view their photos</p>
           </div>
         )}
       </div>

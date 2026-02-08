@@ -81,12 +81,25 @@ export default function GalleryPage() {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b bg-white">
+      <div className="p-6 border-b border-gray-800/50 bg-gray-900/50 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Gallery</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Gallery</h1>
+            <p className="text-sm text-gray-400 mt-1">Your memories, organized by AI</p>
+          </div>
           {stats && (
-            <div className="text-sm text-gray-500">
-              {stats.total_photos} photos • {stats.total_videos} videos • {formatStorage(stats.storage_size_bytes)}
+            <div className="flex items-center gap-4 text-sm">
+              <div className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                <span className="text-blue-400 font-medium">{stats.total_photos}</span>
+                <span className="text-gray-500 ml-1">photos</span>
+              </div>
+              <div className="px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <span className="text-purple-400 font-medium">{stats.total_videos}</span>
+                <span className="text-gray-500 ml-1">videos</span>
+              </div>
+              <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                <span className="text-emerald-400 font-medium">{formatStorage(stats.storage_size_bytes)}</span>
+              </div>
             </div>
           )}
         </div>
@@ -102,10 +115,10 @@ export default function GalleryPage() {
               key={key}
               onClick={() => { setFilter(key as MediaFilter); setSelectedTagId(null) }}
               className={clsx(
-                'px-4 py-2 rounded-lg flex items-center gap-2 transition-colors',
+                'px-4 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 font-medium',
                 filter === key && !selectedTagId
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50'
               )}
             >
               {Icon && <Icon className="w-4 h-4" />}
@@ -118,10 +131,10 @@ export default function GalleryPage() {
             <button
               onClick={() => setShowTagDropdown(!showTagDropdown)}
               className={clsx(
-                'px-4 py-2 rounded-lg flex items-center gap-2 transition-colors',
+                'px-4 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 font-medium',
                 selectedTagId
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/25'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50'
               )}
             >
               <Tag className="w-4 h-4" />
@@ -130,10 +143,10 @@ export default function GalleryPage() {
             </button>
             
             {showTagDropdown && (
-              <div className="absolute top-full left-0 mt-1 w-64 max-h-80 overflow-auto bg-white rounded-lg shadow-lg border z-50">
+              <div className="absolute top-full left-0 mt-2 w-64 max-h-80 overflow-auto bg-gray-800 rounded-xl shadow-xl border border-gray-700/50 z-50">
                 <button
                   onClick={() => { setSelectedTagId(null); setShowTagDropdown(false) }}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-600"
+                  className="w-full px-4 py-3 text-left hover:bg-gray-700/50 text-gray-400 border-b border-gray-700/50"
                 >
                   All (no filter)
                 </button>
@@ -142,12 +155,12 @@ export default function GalleryPage() {
                     key={tag.id}
                     onClick={() => { setSelectedTagId(tag.id); setShowTagDropdown(false) }}
                     className={clsx(
-                      'w-full px-4 py-2 text-left hover:bg-gray-100 flex justify-between items-center',
-                      selectedTagId === tag.id && 'bg-purple-50'
+                      'w-full px-4 py-3 text-left hover:bg-gray-700/50 flex justify-between items-center text-gray-300',
+                      selectedTagId === tag.id && 'bg-purple-500/10'
                     )}
                   >
                     <span>{tag.name}</span>
-                    <span className="text-xs text-gray-400">{tag.photo_count}</span>
+                    <span className="text-xs text-gray-500 bg-gray-700/50 px-2 py-0.5 rounded-full">{tag.photo_count}</span>
                   </button>
                 ))}
               </div>
@@ -158,7 +171,7 @@ export default function GalleryPage() {
           {selectedTagId && (
             <button
               onClick={() => setSelectedTagId(null)}
-              className="p-2 text-gray-500 hover:text-gray-700"
+              className="p-2 text-gray-500 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -170,7 +183,7 @@ export default function GalleryPage() {
       <div className="flex-1 overflow-auto">
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
           </div>
         ) : (
           <>
@@ -178,10 +191,10 @@ export default function GalleryPage() {
             {/* Infinite scroll trigger - inside scrollable area */}
             <div ref={loadMoreRef} className="h-20 flex items-center justify-center">
               {isFetchingNextPage && (
-                <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
               )}
               {!hasNextPage && photos.length > 0 && (
-                <span className="text-sm text-gray-400">End of gallery</span>
+                <span className="text-sm text-gray-600">End of gallery</span>
               )}
             </div>
           </>

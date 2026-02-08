@@ -77,11 +77,11 @@ export default function PhotoGrid({ photos, loading, groupByMonth = true }: Phot
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 p-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 p-4">
         {Array.from({ length: 24 }).map((_, i) => (
           <div
             key={i}
-            className="aspect-square bg-gray-200 rounded-lg animate-pulse"
+            className="aspect-square bg-gray-800/50 rounded-xl animate-pulse"
           />
         ))}
       </div>
@@ -90,9 +90,9 @@ export default function PhotoGrid({ photos, loading, groupByMonth = true }: Phot
 
   if (photos.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-        <p className="text-lg">No photos found</p>
-        <p className="text-sm">Import some photos to get started</p>
+      <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+        <p className="text-lg font-medium">No photos found</p>
+        <p className="text-sm text-gray-500">Import some photos to get started</p>
       </div>
     )
   }
@@ -100,7 +100,7 @@ export default function PhotoGrid({ photos, loading, groupByMonth = true }: Phot
   const renderPhoto = (photo: Photo) => (
     <div
       key={photo.id}
-      className="group relative aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all"
+      className="group relative aspect-square bg-gray-800 rounded-xl overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-500 hover:scale-[1.02] transition-all duration-200"
       onClick={() => setSelectedPhoto(photo)}
     >
       <img
@@ -146,15 +146,15 @@ export default function PhotoGrid({ photos, loading, groupByMonth = true }: Phot
             <section key={group.key}>
               {/* Month divider with clear visual separation */}
               {index > 0 && (
-                <div className="py-6 px-4 bg-slate-200">
-                  <hr className="border-2 border-slate-400" />
+                <div className="py-4 px-6">
+                  <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
                 </div>
               )}
-              <div className="bg-blue-100 px-4 py-4 border-l-4 border-blue-600 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-900">{group.label}</h2>
-                <p className="text-sm text-gray-600">{group.photos.length} photos</p>
+              <div className="px-6 py-4 bg-gray-800/30 border-l-4 border-blue-500">
+                <h2 className="text-xl font-bold text-white">{group.label}</h2>
+                <p className="text-sm text-gray-400">{group.photos.length} photos</p>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 p-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 p-4">
                 {group.photos.map(renderPhoto)}
               </div>
             </section>
