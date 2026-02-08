@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data directories (user data, not tracked)
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# ML Models cache
+models_cache/
+.cache/
+~/.cache/
+*.onnx
+*.pt
+*.pth
+
+# InsightFace models
+~/.insightface/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Node
+node_modules/
+frontend/dist/
+frontend/build/
+.npm
+.yarn/
+*.tsbuildinfo
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.bak
+*.tmp
+*.temp
