@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./logo.jpeg" alt="LocalLens" width="120" height="120">
+  <img src="https://raw.githubusercontent.com/pratik-shivnani/LocalLens/main/logo.jpeg" alt="LocalLens" width="120" height="120">
 </p>
 
 <h1 align="center">LocalLens</h1>
