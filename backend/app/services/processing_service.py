@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 import uuid
 import threading
+import subprocess
+import tempfile
 from app.core.config import get_settings
 from app.db.models import Photo, Tag, Person, Face, ProcessingQueue
 from app.db.database import get_image_collection, get_face_collection
@@ -46,8 +48,51 @@ class ProcessingService:
         self.image_collection = get_image_collection()
         self.face_collection = get_face_collection()
     
+    def extract_video_frame(self, video_path: Path) -> Image.Image | None:
+        """Extract a frame from a video using ffmpeg."""
+        try:
+            with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmp:
+                tmp_path = tmp.name
+            
+            # Extract frame at 1 second (or first frame if video is shorter)
+            cmd = [
+                'ffmpeg', '-y', '-i', str(video_path),
+                '-ss', '00:00:01',  # Seek to 1 second
+                '-vframes', '1',    # Extract 1 frame
+                '-q:v', '2',        # High quality
+                tmp_path
+            ]
+            
+            result = subprocess.run(
+                cmd, 
+                capture_output=True, 
+                timeout=30
+            )
+            
+            if result.returncode != 0:
+                # Try extracting first frame if seeking failed
+                cmd = [
+                    'ffmpeg', '-y', '-i', str(video_path),
+                    '-vframes', '1',
+                    '-q:v', '2',
+                    tmp_path
+                ]
+                subprocess.run(cmd, capture_output=True, timeout=30)
+            
+            if Path(tmp_path).exists() and Path(tmp_path).stat().st_size > 0:
+                img = Image.open(tmp_path)
+                img.load()  # Load into memory before deleting temp file
+                Path(tmp_path).unlink()
+                return img
+            
+            Path(tmp_path).unlink(missing_ok=True)
+            return None
+        except Exception as e:
+            print(f"Error extracting video frame: {e}")
+            return None
+    
     def generate_thumbnails(self, photo: Photo) -> bool:
-        """Generate thumbnails for a photo."""
+        """Generate thumbnails for a photo or video."""
         try:
             source_path = Path(photo.file_path)
             if not source_path.exists():
@@ -57,7 +102,16 @@ class ProcessingService:
             thumb_dir = Path(settings.thumbnail_path) / str(photo.id)
             thumb_dir.mkdir(parents=True, exist_ok=True)
             
-            with Image.open(source_path) as img:
+            # Get image - either directly or extracted from video
+            if photo.is_video:
+                img = self.extract_video_frame(source_path)
+                if img is None:
+                    print(f"Failed to extract frame from video {photo.id}")
+                    return False
+            else:
+                img = Image.open(source_path)
+            
+            with img:
                 # Convert to RGB if needed
                 if img.mode in ("RGBA", "P"):
                     img = img.convert("RGB")

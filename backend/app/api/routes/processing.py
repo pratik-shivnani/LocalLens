@@ -221,3 +221,32 @@ def backfill_dates(db: Session = Depends(get_db)):
     
     db.commit()
     return {"updated": updated, "message": f"Updated {updated} photos with file modification dates"}
+
+
+@router.post("/requeue-videos")
+def requeue_videos(db: Session = Depends(get_db)):
+    """Mark all videos as unprocessed so they can be reprocessed for thumbnails."""
+    videos = db.query(Photo).filter(Photo.is_video == True).all()
+    
+    queued = 0
+    for video in videos:
+        video.is_processed = False
+        video.thumbnail_small = None
+        video.thumbnail_medium = None
+        video.thumbnail_large = None
+        
+        # Remove any existing queue entries for this video
+        db.query(ProcessingQueue).filter(ProcessingQueue.photo_id == video.id).delete()
+        
+        # Add to processing queue with proper task_type and status
+        queue_item = ProcessingQueue(
+            photo_id=video.id, 
+            task_type="full",
+            status="pending",
+            priority=1
+        )
+        db.add(queue_item)
+        queued += 1
+    
+    db.commit()
+    return {"queued": queued, "message": f"Queued {queued} videos for reprocessing"}
