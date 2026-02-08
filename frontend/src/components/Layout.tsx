@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom'
-import { Image, Search, Users, FolderInput, Settings, Shield, Scan } from 'lucide-react'
+import { Image, Search, Users, FolderInput, Settings, Shield } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navItems = [
@@ -13,14 +13,11 @@ const navItems = [
 function Logo({ className = '' }: { className?: string }) {
   return (
     <div className={clsx('flex items-center justify-center', className)}>
-      <div className="relative">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-          <Scan className="w-6 h-6 text-white" />
-        </div>
-        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-gray-900 flex items-center justify-center">
-          <Shield className="w-2 h-2 text-white" />
-        </div>
-      </div>
+      <img 
+        src="/logo.jpeg" 
+        alt="LocalLens" 
+        className="w-10 h-10 rounded-xl shadow-lg"
+      />
     </div>
   )
 }

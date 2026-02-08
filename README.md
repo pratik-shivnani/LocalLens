@@ -1,6 +1,12 @@
-# 🔍 LocalLens
+<p align="center">
+  <img src="logo.jpeg" alt="LocalLens" width="120" height="120" style="border-radius: 24px;">
+</p>
 
-**Your photos, your machine, your privacy.**
+<h1 align="center">LocalLens</h1>
+
+<p align="center">
+  <strong>Your photos, your machine, your privacy.</strong>
+</p>
 
 LocalLens is a self-hosted, ML-powered photo and video organizer that runs entirely on your machine. No cloud uploads, no subscriptions, no privacy concerns — just intelligent organization of your personal media library with face recognition, natural language search, and automatic tagging.
 
