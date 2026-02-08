@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend/public/logo.jpeg" alt="LocalLens" width="120" height="120" style="border-radius: 24px;">
+  <img src="./logo.jpeg" alt="LocalLens" width="120" height="120">
 </p>
 
 <h1 align="center">LocalLens</h1>
