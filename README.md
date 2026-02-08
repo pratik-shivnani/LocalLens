@@ -131,86 +131,24 @@ The frontend runs on `http://localhost:5173`.
 - Processing configuration
 - Storage information
 
-## API Endpoints
-
-### Photos
-- `GET /api/photos` - List photos with pagination
-- `GET /api/photos/{id}` - Get photo details
-- `GET /api/photos/{id}/thumbnail` - Get photo thumbnail
-- `GET /api/photos/{id}/full` - Get full-size photo
-
-### People
-- `GET /api/people` - List all people
-- `GET /api/people/{id}` - Get person details
-- `PUT /api/people/{id}` - Update person name
-- `GET /api/people/{id}/photos` - Get photos of person
-- `GET /api/people/{id}/face` - Get face thumbnail
-- `POST /api/people/{id1}/merge/{id2}` - Merge two people
-
-### Search
-- `POST /api/search/semantic` - Semantic search with query
-
-### Processing
-- `POST /api/processing/start-continuous` - Start processing
-- `POST /api/processing/stop` - Stop processing
-- `GET /api/processing/progress` - Get progress
-- `POST /api/processing/queue-faces` - Queue face processing
-
-### Import
-- `GET /api/import/folders` - List import folders
-- `POST /api/import/folders` - Add folder to scan
-- `POST /api/import/scan/{id}` - Scan folder for photos
-
-### Tags
-- `GET /api/tags` - List all tags
-- `GET /api/tags/{id}/photos` - Get photos with tag
-
 ## Project Structure
 
 ```
-photos_organiser/
 ├── backend/
 │   ├── app/
-│   │   ├── api/routes/      # FastAPI route handlers
-│   │   │   ├── photos.py
-│   │   │   ├── people.py
-│   │   │   ├── search.py
-│   │   │   ├── processing.py
-│   │   │   ├── imports.py
-│   │   │   └── tags.py
-│   │   ├── core/            # Config & settings
-│   │   ├── db/              # Database models & session
-│   │   │   └── models.py    # SQLAlchemy models
-│   │   ├── ml/              # ML pipelines
-│   │   │   ├── clip_embeddings.py
-│   │   │   ├── face_recognition.py
-│   │   │   └── tagger.py
+│   │   ├── api/routes/      # API endpoints
+│   │   ├── db/              # Database models
+│   │   ├── ml/              # ML pipelines (CLIP, InsightFace)
 │   │   ├── services/        # Business logic
-│   │   │   ├── processing_service.py
-│   │   │   └── import_service.py
-│   │   └── main.py          # FastAPI app entry
+│   │   └── main.py
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/      # Reusable UI components
-│   │   │   ├── PhotoGrid.tsx
-│   │   │   ├── PhotoModal.tsx
-│   │   │   └── SearchBar.tsx
-│   │   ├── pages/           # Page components
-│   │   │   ├── GalleryPage.tsx
-│   │   │   ├── SearchPage.tsx
-│   │   │   ├── PeoplePage.tsx
-│   │   │   ├── ImportPage.tsx
-│   │   │   └── SettingsPage.tsx
-│   │   ├── lib/
-│   │   │   └── api.ts       # API client
-│   │   └── App.tsx
-│   ├── package.json
-│   └── tailwind.config.js
+│   │   ├── components/      # UI components
+│   │   ├── pages/           # Page views
+│   │   └── lib/api.ts       # API client
+│   └── package.json
 └── data/                    # Local storage (gitignored)
-    ├── db/                  # SQLite database
-    ├── embeddings/          # ChromaDB vectors
-    └── thumbnails/          # Generated thumbnails
 ```
 
 ## Configuration
