@@ -14,6 +14,11 @@ LocalLens is a self-hosted, ML-powered photo and video organizer that runs entir
 
 ## Features
 
+### 🎨 Theming
+- **Light/Dark Mode** - Toggle between light and dark themes
+- **System Preference** - Automatically detects your OS theme preference
+- **Persistent Choice** - Theme preference saved across sessions
+
 ### 📸 Gallery & Organization
 - **Infinite Scroll Gallery** - Browse all your photos with smooth endless scrolling
 - **Monthly Grouping** - Photos automatically organized by month with visual dividers
