@@ -81,24 +81,24 @@ export default function GalleryPage() {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-6 border-b border-gray-800/50 bg-gray-900/50 backdrop-blur-sm">
+      <div className="p-6 border-b border-gray-200 dark:border-gray-800/50 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm transition-colors duration-200">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-white">Gallery</h1>
-            <p className="text-sm text-gray-400 mt-1">Your memories, organized by AI</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gallery</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Your memories, organized by AI</p>
           </div>
           {stats && (
             <div className="flex items-center gap-4 text-sm">
               <div className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                <span className="text-blue-400 font-medium">{stats.total_photos}</span>
+                <span className="text-blue-600 dark:text-blue-400 font-medium">{stats.total_photos}</span>
                 <span className="text-gray-500 ml-1">photos</span>
               </div>
               <div className="px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                <span className="text-purple-400 font-medium">{stats.total_videos}</span>
+                <span className="text-purple-600 dark:text-purple-400 font-medium">{stats.total_videos}</span>
                 <span className="text-gray-500 ml-1">videos</span>
               </div>
               <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                <span className="text-emerald-400 font-medium">{formatStorage(stats.storage_size_bytes)}</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium">{formatStorage(stats.storage_size_bytes)}</span>
               </div>
             </div>
           )}
@@ -118,7 +118,7 @@ export default function GalleryPage() {
                 'px-4 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 font-medium',
                 filter === key && !selectedTagId
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50'
+                  : 'bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-gray-700/50'
               )}
             >
               {Icon && <Icon className="w-4 h-4" />}
@@ -134,7 +134,7 @@ export default function GalleryPage() {
                 'px-4 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 font-medium',
                 selectedTagId
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/25'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50'
+                  : 'bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-gray-700/50'
               )}
             >
               <Tag className="w-4 h-4" />
@@ -143,10 +143,10 @@ export default function GalleryPage() {
             </button>
             
             {showTagDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-64 max-h-80 overflow-auto bg-gray-800 rounded-xl shadow-xl border border-gray-700/50 z-50">
+              <div className="absolute top-full left-0 mt-2 w-64 max-h-80 overflow-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700/50 z-50">
                 <button
                   onClick={() => { setSelectedTagId(null); setShowTagDropdown(false) }}
-                  className="w-full px-4 py-3 text-left hover:bg-gray-700/50 text-gray-400 border-b border-gray-700/50"
+                  className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700/50"
                 >
                   All (no filter)
                 </button>
@@ -155,12 +155,12 @@ export default function GalleryPage() {
                     key={tag.id}
                     onClick={() => { setSelectedTagId(tag.id); setShowTagDropdown(false) }}
                     className={clsx(
-                      'w-full px-4 py-3 text-left hover:bg-gray-700/50 flex justify-between items-center text-gray-300',
+                      'w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700/50 flex justify-between items-center text-gray-700 dark:text-gray-300',
                       selectedTagId === tag.id && 'bg-purple-500/10'
                     )}
                   >
                     <span>{tag.name}</span>
-                    <span className="text-xs text-gray-500 bg-gray-700/50 px-2 py-0.5 rounded-full">{tag.photo_count}</span>
+                    <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700/50 px-2 py-0.5 rounded-full">{tag.photo_count}</span>
                   </button>
                 ))}
               </div>
@@ -171,7 +171,7 @@ export default function GalleryPage() {
           {selectedTagId && (
             <button
               onClick={() => setSelectedTagId(null)}
-              className="p-2 text-gray-500 hover:text-white transition-colors"
+              className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -194,7 +194,7 @@ export default function GalleryPage() {
                 <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
               )}
               {!hasNextPage && photos.length > 0 && (
-                <span className="text-sm text-gray-600">End of gallery</span>
+                <span className="text-sm text-gray-500 dark:text-gray-600">End of gallery</span>
               )}
             </div>
           </>

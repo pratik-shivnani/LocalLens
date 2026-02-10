@@ -43,10 +43,10 @@ export default function PeoplePage() {
   return (
     <div className="h-full flex">
       {/* People list sidebar */}
-      <div className="w-80 border-r border-gray-800/50 bg-gray-900/30 overflow-auto">
-        <div className="p-6 border-b border-gray-800/50">
-          <h1 className="text-xl font-bold text-white">People</h1>
-          <p className="text-sm text-gray-400 mt-1">
+      <div className="w-80 border-r border-gray-200 dark:border-gray-800/50 bg-gray-50 dark:bg-gray-900/30 overflow-auto transition-colors duration-200">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-800/50">
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">People</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {people?.length || 0} people recognized
           </p>
         </div>
@@ -63,12 +63,12 @@ export default function PeoplePage() {
                 className={`p-3 cursor-pointer rounded-xl mb-1 transition-all ${
                   selectedPerson?.id === person.id 
                     ? 'bg-blue-600/20 border border-blue-500/30' 
-                    : 'hover:bg-gray-800/50 border border-transparent'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-800/50 border border-transparent'
                 }`}
                 onClick={() => setSelectedPerson(person)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden ring-2 ring-gray-700">
+                  <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center overflow-hidden ring-2 ring-gray-300 dark:ring-gray-700">
                     <img
                       src={peopleApi.getFaceThumbnailUrl(person.id, 96)}
                       alt=""
@@ -87,31 +87,31 @@ export default function PeoplePage() {
                           type="text"
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
-                          className="flex-1 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-sm text-white"
+                          className="flex-1 px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
                           autoFocus
                           onClick={(e) => e.stopPropagation()}
                         />
                         <button
                           onClick={(e) => { e.stopPropagation(); handleSaveEdit(person.id) }}
-                          className="p-1 text-emerald-400 hover:bg-emerald-500/20 rounded"
+                          className="p-1 text-emerald-500 hover:bg-emerald-500/20 rounded"
                         >
                           <Check className="w-4 h-4" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setEditingId(null) }}
-                          className="p-1 text-red-400 hover:bg-red-500/20 rounded"
+                          className="p-1 text-red-500 hover:bg-red-500/20 rounded"
                         >
                           <X className="w-4 h-4" />
                         </button>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <span className="font-medium truncate text-white">
+                        <span className="font-medium truncate text-gray-900 dark:text-white">
                           {person.name || `Person ${person.id}`}
                         </span>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleStartEdit(person) }}
-                          className="p-1 text-gray-500 hover:text-white rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white rounded opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <Edit2 className="w-3 h-3" />
                         </button>
@@ -132,11 +132,11 @@ export default function PeoplePage() {
       <div className="flex-1 overflow-auto">
         {selectedPerson ? (
           <>
-            <div className="p-6 border-b border-gray-800/50 bg-gray-900/50">
-              <h2 className="text-lg font-semibold text-white">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-800/50 bg-white/50 dark:bg-gray-900/50 transition-colors duration-200">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 {selectedPerson.name || `Person ${selectedPerson.id}`}
               </h2>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {personPhotos?.length || 0} photos
               </p>
             </div>
@@ -150,7 +150,7 @@ export default function PeoplePage() {
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            <User className="w-16 h-16 text-gray-700 mb-4" />
+            <User className="w-16 h-16 text-gray-300 dark:text-gray-700 mb-4" />
             <p className="text-lg">Select a person to view their photos</p>
           </div>
         )}

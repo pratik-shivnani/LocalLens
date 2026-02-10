@@ -43,8 +43,8 @@ export default function ProcessingProgressBar() {
   
   if (isLoading) {
     return (
-      <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4">
-        <div className="animate-pulse h-20 bg-gray-700/50 rounded-xl" />
+      <div className="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700/50 p-4 transition-colors duration-200">
+        <div className="animate-pulse h-20 bg-gray-200 dark:bg-gray-700/50 rounded-xl" />
       </div>
     )
   }
@@ -54,10 +54,10 @@ export default function ProcessingProgressBar() {
   const queueLength = status?.queue_length ?? 0
   
   return (
-    <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4 space-y-4">
+    <div className="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700/50 p-4 space-y-4 transition-colors duration-200">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-white flex items-center gap-2">
-          <Zap className="w-5 h-5 text-yellow-400" />
+        <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <Zap className="w-5 h-5 text-yellow-500" />
           AI Processing
         </h3>
         <div className="flex gap-2">
@@ -65,7 +65,7 @@ export default function ProcessingProgressBar() {
             <button
               onClick={() => queueAllMutation.mutate()}
               disabled={queueAllMutation.isPending}
-              className="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
+              className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
             >
               Queue All Unprocessed
             </button>
@@ -74,7 +74,7 @@ export default function ProcessingProgressBar() {
             <button
               onClick={() => stopMutation.mutate()}
               disabled={stopMutation.isPending}
-              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 rounded-xl flex items-center gap-2 transition-colors"
+              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-400 border border-red-500/30 rounded-xl flex items-center gap-2 transition-colors"
             >
               <Square className="w-4 h-4" />
               Stop
@@ -83,7 +83,7 @@ export default function ProcessingProgressBar() {
             <button
               onClick={() => startMutation.mutate()}
               disabled={startMutation.isPending || queueLength === 0}
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 disabled:from-gray-600 disabled:to-gray-600 text-white rounded-xl flex items-center gap-2 transition-all hover:shadow-lg hover:shadow-blue-500/25"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 disabled:from-gray-400 disabled:to-gray-400 dark:disabled:from-gray-600 dark:disabled:to-gray-600 text-white rounded-xl flex items-center gap-2 transition-all hover:shadow-lg hover:shadow-blue-500/25"
             >
               <Play className="w-4 h-4" />
               Start Processing
@@ -96,11 +96,11 @@ export default function ProcessingProgressBar() {
         <>
           {/* Progress bar */}
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-gray-400">
+            <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
               <span>Progress: {progress?.processed ?? 0} / {progress?.total ?? 0}</span>
-              <span className="text-blue-400 font-medium">{percent.toFixed(1)}%</span>
+              <span className="text-blue-600 dark:text-blue-400 font-medium">{percent.toFixed(1)}%</span>
             </div>
-            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-300"
                 style={{ width: `${percent}%` }}
@@ -109,10 +109,10 @@ export default function ProcessingProgressBar() {
           </div>
           
           {/* Current file info */}
-          <div className="flex items-center gap-3 text-sm text-gray-400 bg-gray-900/50 rounded-xl p-3">
-            <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+          <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 rounded-xl p-3 transition-colors duration-200">
+            <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
             <div className="flex-1 min-w-0">
-              <div className="truncate font-medium text-white">{progress?.current_photo}</div>
+              <div className="truncate font-medium text-gray-900 dark:text-white">{progress?.current_photo}</div>
               <div className="text-xs text-gray-500">
                 Step: {progress?.current_step} • Speed: {progress?.speed?.toFixed(2)} photos/sec
               </div>
@@ -122,19 +122,19 @@ export default function ProcessingProgressBar() {
       )}
       
       {!isRunning && (
-        <div className="text-sm text-gray-400 space-y-1">
+        <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
           <div className="flex justify-between">
             <span>Pending in queue:</span>
-            <span className="font-medium text-white">{queueLength}</span>
+            <span className="font-medium text-gray-900 dark:text-white">{queueLength}</span>
           </div>
           <div className="flex justify-between">
             <span>Completed:</span>
-            <span className="font-medium text-emerald-400">{status?.completed ?? 0}</span>
+            <span className="font-medium text-emerald-600 dark:text-emerald-400">{status?.completed ?? 0}</span>
           </div>
           {(status?.failed ?? 0) > 0 && (
             <div className="flex justify-between">
               <span>Failed:</span>
-              <span className="font-medium text-red-400">{status?.failed}</span>
+              <span className="font-medium text-red-600 dark:text-red-400">{status?.failed}</span>
             </div>
           )}
         </div>
