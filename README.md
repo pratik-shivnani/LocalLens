@@ -32,7 +32,14 @@ LocalLens is a self-hosted, ML-powered photo and video organizer that runs entir
 - **Face Thumbnails** - Cropped face thumbnails for each person
 - **Person Photos** - View all photos containing a specific person
 
-### 🔍 Smart Search
+### � Albums
+- **Create Albums** - Organize photos into custom albums/collections
+- **Add to Album** - Add photos to albums directly from the photo viewer
+- **Album Management** - Edit album names, delete albums with confirmation
+- **Album View** - Browse photos within an album with full photo modal support
+- **Remove from Album** - Remove individual photos from albums
+
+### �🔍 Smart Search
 - **Natural Language Search** - Find photos using plain English queries ("photos at the beach", "birthday cake")
 - **AI-Powered** - Uses CLIP embeddings for semantic understanding
 - **Fast Results** - ChromaDB vector database for quick similarity search

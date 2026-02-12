@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Camera, Tag, User } from 'lucide-react'
-import { Photo, photosApi } from '../lib/api'
+import { useEffect, useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Camera, Tag, User, FolderPlus, Check, Plus } from 'lucide-react'
+import { Photo, photosApi, albumsApi } from '../lib/api'
 import { format } from 'date-fns'
 
 interface PhotoModalProps {
@@ -12,9 +12,44 @@ interface PhotoModalProps {
 }
 
 export default function PhotoModal({ photo, onClose, onPrevious, onNext }: PhotoModalProps) {
+  const queryClient = useQueryClient()
+  const [showAlbumDropdown, setShowAlbumDropdown] = useState(false)
+  const [newAlbumName, setNewAlbumName] = useState('')
+  const [isCreatingAlbum, setIsCreatingAlbum] = useState(false)
+
   const { data: photoDetail } = useQuery({
     queryKey: ['photo', photo.id],
     queryFn: () => photosApi.get(photo.id),
+  })
+
+  const { data: albums } = useQuery({
+    queryKey: ['albums'],
+    queryFn: () => albumsApi.list(),
+    enabled: showAlbumDropdown,
+  })
+
+  const addToAlbumMutation = useMutation({
+    mutationFn: (albumId: number) => albumsApi.addPhotos(albumId, [photo.id]),
+    onSuccess: (_, albumId) => {
+      queryClient.invalidateQueries({ queryKey: ['albums'] })
+      queryClient.invalidateQueries({ queryKey: ['album', albumId] })
+      setShowAlbumDropdown(false)
+    },
+  })
+
+  const createAlbumMutation = useMutation({
+    mutationFn: async (name: string) => {
+      const album = await albumsApi.create(name)
+      await albumsApi.addPhotos(album.id, [photo.id])
+      return album
+    },
+    onSuccess: (album) => {
+      queryClient.invalidateQueries({ queryKey: ['albums'] })
+      queryClient.invalidateQueries({ queryKey: ['album', album.id] })
+      setNewAlbumName('')
+      setIsCreatingAlbum(false)
+      setShowAlbumDropdown(false)
+    },
   })
 
   useEffect(() => {
@@ -150,6 +185,93 @@ export default function PhotoModal({ photo, onClose, onPrevious, onNext }: Photo
               </div>
             </div>
           )}
+          
+          <hr className="border-gray-700 my-4" />
+          
+          {/* Add to Album */}
+          <div className="mb-4 relative">
+            <button
+              onClick={() => setShowAlbumDropdown(!showAlbumDropdown)}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              <FolderPlus className="w-4 h-4" />
+              Add to Album
+            </button>
+            
+            {showAlbumDropdown && (
+              <div className="absolute bottom-full left-0 right-0 mb-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-64 overflow-y-auto z-10">
+                {isCreatingAlbum ? (
+                  <div className="p-3">
+                    <input
+                      type="text"
+                      value={newAlbumName}
+                      onChange={(e) => setNewAlbumName(e.target.value)}
+                      placeholder="Album name..."
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && newAlbumName.trim()) {
+                          createAlbumMutation.mutate(newAlbumName.trim())
+                        }
+                        if (e.key === 'Escape') {
+                          setIsCreatingAlbum(false)
+                          setNewAlbumName('')
+                        }
+                      }}
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={() => {
+                          if (newAlbumName.trim()) {
+                            createAlbumMutation.mutate(newAlbumName.trim())
+                          }
+                        }}
+                        disabled={!newAlbumName.trim() || createAlbumMutation.isPending}
+                        className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white text-sm rounded transition-colors"
+                      >
+                        <Check className="w-3 h-3" />
+                        Create
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsCreatingAlbum(false)
+                          setNewAlbumName('')
+                        }}
+                        className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm rounded transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setIsCreatingAlbum(true)}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-left text-sm text-blue-400 hover:bg-gray-700/50 border-b border-gray-700"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Create New Album
+                    </button>
+                    {albums && albums.length > 0 ? (
+                      albums.map((album) => (
+                        <button
+                          key={album.id}
+                          onClick={() => addToAlbumMutation.mutate(album.id)}
+                          disabled={addToAlbumMutation.isPending}
+                          className="w-full flex items-center justify-between px-4 py-3 text-left text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                        >
+                          <span className="truncate">{album.name}</span>
+                          <span className="text-xs text-gray-500">{album.photo_count} photos</span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3 text-sm text-gray-500">No albums yet</div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
           
           <hr className="border-gray-700 my-4" />
           

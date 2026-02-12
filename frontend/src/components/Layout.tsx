@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom'
-import { Image, Search, Users, FolderInput, Settings, Shield, Sun, Moon } from 'lucide-react'
+import { Image, Search, Users, FolderInput, Settings, Shield, Sun, Moon, FolderOpen } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useTheme } from '../contexts/ThemeContext'
 
@@ -7,6 +7,7 @@ const navItems = [
   { to: '/', icon: Image, label: 'Gallery' },
   { to: '/search', icon: Search, label: 'Search' },
   { to: '/people', icon: Users, label: 'People' },
+  { to: '/albums', icon: FolderOpen, label: 'Albums' },
   { to: '/import', icon: FolderInput, label: 'Import' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ]

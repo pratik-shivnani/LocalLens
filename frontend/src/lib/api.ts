@@ -249,4 +249,57 @@ export const tagsApi = {
   },
 }
 
+// Album interfaces
+export interface Album {
+  id: number
+  name: string
+  description: string | null
+  cover_photo_id: number | null
+  created_at: string
+  updated_at: string
+  photo_count: number
+}
+
+export interface AlbumDetail extends Album {
+  photos: Photo[]
+}
+
+// Albums API
+export const albumsApi = {
+  list: async (limit = 50, offset = 0) => {
+    const { data } = await api.get<Album[]>(`/albums/?limit=${limit}&offset=${offset}`)
+    return data
+  },
+  
+  get: async (id: number) => {
+    const { data } = await api.get<AlbumDetail>(`/albums/${id}`)
+    return data
+  },
+  
+  create: async (name: string, description?: string) => {
+    const { data } = await api.post<Album>('/albums/', { name, description })
+    return data
+  },
+  
+  update: async (id: number, updates: { name?: string; description?: string; cover_photo_id?: number }) => {
+    const { data } = await api.put<Album>(`/albums/${id}`, updates)
+    return data
+  },
+  
+  delete: async (id: number) => {
+    const { data } = await api.delete(`/albums/${id}`)
+    return data
+  },
+  
+  addPhotos: async (albumId: number, photoIds: number[]) => {
+    const { data } = await api.post(`/albums/${albumId}/photos`, { photo_ids: photoIds })
+    return data
+  },
+  
+  removePhoto: async (albumId: number, photoId: number) => {
+    const { data } = await api.delete(`/albums/${albumId}/photos/${photoId}`)
+    return data
+  },
+}
+
 export default api

@@ -184,5 +184,38 @@ class LibraryStats(BaseModel):
     storage_size_bytes: int
 
 
+# Album schemas
+class AlbumCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+
+class AlbumUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    cover_photo_id: Optional[int] = None
+
+
+class AlbumResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    cover_photo_id: Optional[int] = None
+    created_at: datetime
+    updated_at: datetime
+    photo_count: int = 0
+    
+    class Config:
+        from_attributes = True
+
+
+class AlbumDetail(AlbumResponse):
+    photos: list[PhotoResponse] = []
+
+
+class AlbumAddPhotos(BaseModel):
+    photo_ids: list[int]
+
+
 # Update forward references
 PhotoDetail.model_rebuild()

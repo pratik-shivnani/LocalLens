@@ -172,3 +172,30 @@ class ProcessingQueue(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
+
+
+class Album(Base):
+    __tablename__ = "albums"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    cover_photo_id = Column(Integer, ForeignKey("photos.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    cover_photo = relationship("Photo", foreign_keys=[cover_photo_id])
+    album_photos = relationship("AlbumPhoto", back_populates="album", cascade="all, delete-orphan")
+
+
+class AlbumPhoto(Base):
+    __tablename__ = "album_photos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    album_id = Column(Integer, ForeignKey("albums.id", ondelete="CASCADE"), nullable=False)
+    photo_id = Column(Integer, ForeignKey("photos.id"), nullable=False)
+    added_at = Column(DateTime, default=datetime.utcnow)
+    sort_order = Column(Integer, default=0)
+    
+    album = relationship("Album", back_populates="album_photos")
+    photo = relationship("Photo")
